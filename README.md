@@ -66,3 +66,7 @@ Scan the QR code displayed in the terminal using the Expo Go app on your mobile 
 "Tilt to Move" offers a simple yet engaging way to interact with your phone's sensors, providing a fun and educational experience for users of all ages.
 
 
+### Proof of Life
+
+![img](./assets/images/ProofOfLife1.png)
+![img](./assets/images/ProofOfLife2.png)
