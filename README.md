@@ -1,50 +1,68 @@
-# Welcome to your Expo app 👋
+# Tilt To Move App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Author: Evan Cheng
 
-## Get started
+## Description
 
-1. Install dependencies
+"Tilt to Move" is a simple and interactive mobile game developed using React Native and Expo. The game leverages the phone's accelerometer to move an on-screen object based on the tilt of the device. The goal of the game is to control the movement of the object by tilting the phone and achieve a high score by keeping the object within the screen boundaries.
 
-   ```bash
-   npm install
-   ```
+## Features
 
-2. Start the app
+### Tilt-Based Movement
+- Utilizes the phone's accelerometer to track the tilt and translate it into the movement of the on-screen object.
 
-   ```bash
-    npx expo start
-   ```
+### Responsive Gameplay
+- Real-time movement of the object based on the player's physical actions, providing an engaging and intuitive experience.
 
-In the output, you'll find options to open the app in a
+### Scoring System
+- A simple scoring mechanism that increases the score as the player successfully moves the object.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### High Fidelity UI
+- A clean and minimalist design with smooth animations for a pleasant user experience.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Customization Options
+- Future enhancements could include allowing players to choose different shapes and colors for the moving object.
 
-## Get a fresh project
+## Technology Stack
+- **React Native**: For building the mobile application.
+- **Expo**: To streamline development and access native device features.
+- **Expo Sensors**: To utilize the phone's accelerometer for detecting tilt.
 
-When you're ready, run:
+## Installation and Setup
 
-```bash
-npm run reset-project
+### Clone the Repository
+```sh
+git clone https://github.com/your-username/tilt-to-move.git
+cd tilt-to-move
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Install Dependencies
+```sh
+npm install
+```
 
-## Learn more
+### Run the Application
+```sh
+npx expo start
+```
+Scan the QR code displayed in the terminal using the Expo Go app on your mobile device.
 
-To learn more about developing your project with Expo, look at the following resources:
+-----
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## How to Play
+1. Open the app on your mobile device.
+2. Tilt your phone to move the on-screen object.
+3. Try to keep the object within the screen boundaries to increase your score.
+4. The score will be displayed at the top of the screen.
 
-## Join the community
 
-Join our community of developers creating universal apps.
+### Future Enhancements
+• Add different shapes and colors for the object.
+• Implement levels with increasing difficulty.
+• Add sound effects and background music for a more immersive experience.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+----
+
+"Tilt to Move" offers a simple yet engaging way to interact with your phone's sensors, providing a fun and educational experience for users of all ages.
+
+
