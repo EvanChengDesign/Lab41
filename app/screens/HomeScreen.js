@@ -1,20 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import { GameContext } from '../context/GameContext';
 
-export default function HomeScreen({ navigation }) {
-  const context = useContext(GameContext);
-
-  console.log('HomeScreen context:', context);
-
-  if (!context) {
-    return <Text>Loading...</Text>;
-  }
-
-  const { score, setScore } = context;
-
+export default function HomeScreen({ navigation, score, setScore, setIsGameActive }) {
   const handleStartGame = () => {
+    console.log("Start Game clicked");
     setScore(0);
+    setIsGameActive(true);
     navigation.navigate('Game');
   };
 
