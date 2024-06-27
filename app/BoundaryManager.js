@@ -2,48 +2,49 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Dimensions, Animated } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
+const OBJECT_SIZE = 50;
+const MIN_RADIUS = OBJECT_SIZE * 1.5;
+const MAX_RADIUS = Math.min(width, height) / 3;
 
 const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
-  const boundaryX = useState(new Animated.Value(50))[0];
-  const boundaryY = useState(new Animated.Value(50))[0];
-  const boundaryWidth = useState(new Animated.Value(width - 100))[0];
-  const boundaryHeight = useState(new Animated.Value(height - 100))[0];
+  const boundaryX = useState(new Animated.Value(width / 2 - MIN_RADIUS))[0];
+  const boundaryY = useState(new Animated.Value(height / 2 - MIN_RADIUS))[0];
+  const boundaryRadius = useState(new Animated.Value(MIN_RADIUS))[0];
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const updateBoundary = () => {
+      const radius = MIN_RADIUS + Math.random() * (MAX_RADIUS - MIN_RADIUS);
+      const maxX = width - radius * 2;
+      const maxY = height - radius * 2;
       const newBoundary = {
-        x: Math.random() * (width - 100),
-        y: Math.random() * (height - 100),
-        width: 100 + Math.random() * (width - 100),
-        height: 100 + Math.random() * (height - 100),
+        x: Math.random() * maxX,
+        y: Math.random() * maxY,
+        radius,
       };
 
       Animated.timing(boundaryX, {
         toValue: newBoundary.x,
-        duration: 2000, // Smooth transition over 2 seconds
+        duration: 5000,
         useNativeDriver: false,
       }).start();
 
       Animated.timing(boundaryY, {
         toValue: newBoundary.y,
-        duration: 2000, // Smooth transition over 2 seconds
+        duration: 5000,
         useNativeDriver: false,
       }).start();
 
-      Animated.timing(boundaryWidth, {
-        toValue: newBoundary.width,
-        duration: 2000, // Smooth transition over 2 seconds
-        useNativeDriver: false,
-      }).start();
-
-      Animated.timing(boundaryHeight, {
-        toValue: newBoundary.height,
-        duration: 2000, // Smooth transition over 2 seconds
+      Animated.timing(boundaryRadius, {
+        toValue: newBoundary.radius,
+        duration: 5000,
         useNativeDriver: false,
       }).start();
 
       console.log('Boundary updated:', newBoundary);
-    }, 5000); // Change shape every 5 seconds
+    };
+
+    updateBoundary();
+    const interval = setInterval(updateBoundary, 10000);
 
     return () => clearInterval(interval);
   }, []);
@@ -51,21 +52,27 @@ const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
   useEffect(() => {
     const { x, y } = position;
 
-    const bx = boundaryX._value;
-    const by = boundaryY._value;
-    const bw = boundaryWidth._value;
-    const bh = boundaryHeight._value;
+    const bx = boundaryX._value + boundaryRadius._value;
+    const by = boundaryY._value + boundaryRadius._value;
+    const br = boundaryRadius._value;
 
     console.log('Position:', position);
-    console.log('Boundary:', { bx, by, bw, bh });
+    console.log('Boundary:', { bx, by, br });
 
-    if (x >= bx && x <= bx + bw && y >= by && y <= by + bh) {
+    const distance = Math.sqrt((x - bx) ** 2 + (y - by) ** 2);
+
+    if (distance <= br - OBJECT_SIZE / 2) {
       setIsGameActive(true);
     } else {
       setIsGameActive(false);
       onGameEnd();
     }
-  }, [position, boundaryX, boundaryY, boundaryWidth, boundaryHeight, setIsGameActive, onGameEnd]);
+
+    if (x <= OBJECT_SIZE / 2 || x >= width - OBJECT_SIZE / 2 || y <= OBJECT_SIZE / 2 || y >= height - OBJECT_SIZE / 2) {
+      setIsGameActive(false);
+      onGameEnd();
+    }
+  }, [position, boundaryX, boundaryY, boundaryRadius, setIsGameActive, onGameEnd]);
 
   return (
     <Animated.View
@@ -74,8 +81,15 @@ const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
         {
           left: boundaryX,
           top: boundaryY,
-          width: boundaryWidth,
-          height: boundaryHeight,
+          width: boundaryRadius.interpolate({
+            inputRange: [0, Math.min(width, height) / 2],
+            outputRange: [0, Math.min(width, height)],
+          }),
+          height: boundaryRadius.interpolate({
+            inputRange: [0, Math.min(width, height) / 2],
+            outputRange: [0, Math.min(width, height)],
+          }),
+          borderRadius: boundaryRadius,
         },
       ]}
     />
@@ -85,7 +99,7 @@ const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
 const styles = StyleSheet.create({
   boundary: {
     position: 'absolute',
-    backgroundColor: 'rgba(0, 0, 255, 0.2)', // Light blue color with some transparency
+    backgroundColor: 'rgba(0, 0, 255, 0.2)',
     borderWidth: 2,
     borderColor: 'blue',
   },

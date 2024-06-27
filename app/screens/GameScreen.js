@@ -4,10 +4,17 @@ import { Accelerometer } from 'expo-sensors';
 import BoundaryManager from '../BoundaryManager';
 
 const { width, height } = Dimensions.get('window');
+const OBJECT_SIZE = 50;
+const ACCELERATION_MULTIPLIER = 300; // Increase this value to make the object move faster
 
 export default function GameScreen({ navigation, score, setScore, isGameActive, setIsGameActive }) {
+  const [initialPosition, setInitialPosition] = useState({ x: width / 2, y: height / 2 });
   const [data, setData] = useState({ x: 0, y: 0, z: 0 });
-  const [animatedValue] = useState(new Animated.ValueXY({ x: width / 2 - 25, y: height / 2 - 25 }));
+  const [animatedValue, setAnimatedValue] = useState(new Animated.ValueXY({ x: initialPosition.x - OBJECT_SIZE / 2, y: initialPosition.y - OBJECT_SIZE / 2 }));
+
+  useEffect(() => {
+    setAnimatedValue(new Animated.ValueXY({ x: initialPosition.x - OBJECT_SIZE / 2, y: initialPosition.y - OBJECT_SIZE / 2 }));
+  }, [initialPosition]);
 
   useEffect(() => {
     Accelerometer.setUpdateInterval(16);
@@ -23,8 +30,8 @@ export default function GameScreen({ navigation, score, setScore, isGameActive, 
   useEffect(() => {
     const { x, y } = data;
 
-    const newX = Math.min(Math.max(animatedValue.x._value + x * 100, 0), width - 50);
-    const newY = Math.min(Math.max(animatedValue.y._value - y * 100, 0), height - 50);
+    const newX = Math.min(Math.max(animatedValue.x._value + x * ACCELERATION_MULTIPLIER, 0), width - OBJECT_SIZE);
+    const newY = Math.min(Math.max(animatedValue.y._value - y * ACCELERATION_MULTIPLIER, 0), height - OBJECT_SIZE);
 
     console.log('New X:', newX, 'New Y:', newY);
 
@@ -34,7 +41,7 @@ export default function GameScreen({ navigation, score, setScore, isGameActive, 
     }).start();
   }, [data]);
 
-  const position = { x: animatedValue.x._value, y: animatedValue.y._value };
+  const position = { x: animatedValue.x._value + OBJECT_SIZE / 2, y: animatedValue.y._value + OBJECT_SIZE / 2 };
 
   const handleGameEnd = () => {
     console.log('Game ended');
@@ -42,21 +49,30 @@ export default function GameScreen({ navigation, score, setScore, isGameActive, 
     navigation.navigate('Home');
   };
 
+  const handleGameExit = () => {
+    setIsGameActive(false);
+    navigation.navigate('Home');
+  };
+
   const objectStyle = {
-    width: 50,
-    height: 50,
+    width: OBJECT_SIZE,
+    height: OBJECT_SIZE,
     backgroundColor: 'red',
-    borderRadius: 25,
+    borderRadius: OBJECT_SIZE / 2,
     position: 'absolute',
   };
 
   return (
     <View style={styles.container}>
       <Animated.View style={[objectStyle, animatedValue.getLayout()]} />
-      <BoundaryManager position={position} onGameEnd={handleGameEnd} setIsGameActive={setIsGameActive} />
+      <BoundaryManager
+        position={position}
+        onGameEnd={handleGameEnd}
+        setIsGameActive={setIsGameActive}
+      />
       <View style={styles.overlay}>
         <Text style={styles.score}>Score: {score}</Text>
-        <Button title="End Game" onPress={handleGameEnd} />
+        <Button title="End Game" onPress={handleGameExit} />
       </View>
     </View>
   );

@@ -7,7 +7,6 @@ export default function App() {
 
   useEffect(() => {
     let interval;
-    console.log('Game Active:', isGameActive);
 
     if (isGameActive) {
       interval = setInterval(() => {
