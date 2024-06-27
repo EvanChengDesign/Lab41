@@ -40,7 +40,7 @@ const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
         useNativeDriver: false,
       }).start();
 
-      console.log('Boundary updated:', newBoundary);
+      // console.log('Boundary updated:', newBoundary);
     };
 
     updateBoundary();
@@ -56,8 +56,8 @@ const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
     const by = boundaryY._value + boundaryRadius._value;
     const br = boundaryRadius._value;
 
-    console.log('Position:', position);
-    console.log('Boundary:', { bx, by, br });
+    // console.log('Position:', position);
+    // console.log('Boundary:', { bx, by, br });
 
     const distance = Math.sqrt((x - bx) ** 2 + (y - by) ** 2);
 

@@ -3,7 +3,7 @@ import { View, Text, Button, StyleSheet } from 'react-native';
 
 export default function HomeScreen({ navigation, score, setScore, setIsGameActive }) {
   const handleStartGame = () => {
-    console.log("Start Game clicked");
+   // console.log("Start Game clicked");
     setScore(0);
     setIsGameActive(true);
     navigation.navigate('Game');

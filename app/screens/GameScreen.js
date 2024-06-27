@@ -21,7 +21,7 @@ export default function GameScreen({ navigation, score, setScore, isGameActive, 
 
     const subscription = Accelerometer.addListener((accelerometerData) => {
       setData(accelerometerData);
-      console.log('Accelerometer data:', accelerometerData);
+      // console.log('Accelerometer data:', accelerometerData);
     });
 
     return () => subscription && subscription.remove();
@@ -33,7 +33,7 @@ export default function GameScreen({ navigation, score, setScore, isGameActive, 
     const newX = Math.min(Math.max(animatedValue.x._value + x * ACCELERATION_MULTIPLIER, 0), width - OBJECT_SIZE);
     const newY = Math.min(Math.max(animatedValue.y._value - y * ACCELERATION_MULTIPLIER, 0), height - OBJECT_SIZE);
 
-    console.log('New X:', newX, 'New Y:', newY);
+    // console.log('New X:', newX, 'New Y:', newY);
 
     Animated.spring(animatedValue, {
       toValue: { x: newX, y: newY },
@@ -44,7 +44,7 @@ export default function GameScreen({ navigation, score, setScore, isGameActive, 
   const position = { x: animatedValue.x._value + OBJECT_SIZE / 2, y: animatedValue.y._value + OBJECT_SIZE / 2 };
 
   const handleGameEnd = () => {
-    console.log('Game ended');
+    // console.log('Game ended');
     setIsGameActive(false);
     navigation.navigate('Home');
   };
