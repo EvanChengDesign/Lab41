@@ -4,12 +4,10 @@ import { View, StyleSheet, Dimensions, Animated } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
-  const [boundary] = useState(new Animated.ValueXY({
-    x: 50,
-    y: 50,
-    width: width - 100,
-    height: height - 100,
-  }));
+  const boundaryX = useState(new Animated.Value(50))[0];
+  const boundaryY = useState(new Animated.Value(50))[0];
+  const boundaryWidth = useState(new Animated.Value(width - 100))[0];
+  const boundaryHeight = useState(new Animated.Value(height - 100))[0];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -20,8 +18,26 @@ const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
         height: 100 + Math.random() * (height - 100),
       };
 
-      Animated.timing(boundary, {
-        toValue: newBoundary,
+      Animated.timing(boundaryX, {
+        toValue: newBoundary.x,
+        duration: 2000, // Smooth transition over 2 seconds
+        useNativeDriver: false,
+      }).start();
+
+      Animated.timing(boundaryY, {
+        toValue: newBoundary.y,
+        duration: 2000, // Smooth transition over 2 seconds
+        useNativeDriver: false,
+      }).start();
+
+      Animated.timing(boundaryWidth, {
+        toValue: newBoundary.width,
+        duration: 2000, // Smooth transition over 2 seconds
+        useNativeDriver: false,
+      }).start();
+
+      Animated.timing(boundaryHeight, {
+        toValue: newBoundary.height,
         duration: 2000, // Smooth transition over 2 seconds
         useNativeDriver: false,
       }).start();
@@ -30,17 +46,18 @@ const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
     }, 5000); // Change shape every 5 seconds
 
     return () => clearInterval(interval);
-  }, [boundary]);
+  }, []);
 
   useEffect(() => {
     const { x, y } = position;
-    const bx = boundary.x._value;
-    const by = boundary.y._value;
-    const bw = boundary.width._value;
-    const bh = boundary.height._value;
+
+    const bx = boundaryX._value;
+    const by = boundaryY._value;
+    const bw = boundaryWidth._value;
+    const bh = boundaryHeight._value;
 
     console.log('Position:', position);
-    console.log('Boundary:', boundary);
+    console.log('Boundary:', { bx, by, bw, bh });
 
     if (x >= bx && x <= bx + bw && y >= by && y <= by + bh) {
       setIsGameActive(true);
@@ -48,17 +65,17 @@ const BoundaryManager = ({ position, onGameEnd, setIsGameActive }) => {
       setIsGameActive(false);
       onGameEnd();
     }
-  }, [position, boundary, setIsGameActive, onGameEnd]);
+  }, [position, boundaryX, boundaryY, boundaryWidth, boundaryHeight, setIsGameActive, onGameEnd]);
 
   return (
     <Animated.View
       style={[
         styles.boundary,
         {
-          left: boundary.x,
-          top: boundary.y,
-          width: boundary.width,
-          height: boundary.height,
+          left: boundaryX,
+          top: boundaryY,
+          width: boundaryWidth,
+          height: boundaryHeight,
         },
       ]}
     />
@@ -75,6 +92,3 @@ const styles = StyleSheet.create({
 });
 
 export default BoundaryManager;
-
-
-
